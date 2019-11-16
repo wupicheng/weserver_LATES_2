@@ -3,6 +3,8 @@
 import base64
 import os
 import mimetypes
+import MySQLdb
+from util.util import WeUtil
 
 # mimetypes=MimeTypes()
 
@@ -26,9 +28,17 @@ def binaryReturn(absolute_path):
         "headers": {'Content-Type': type},
         "body": html
     }
-def checkLogin():
+def checkLogin(session_key):
+    sql=" select * from we_session where we_session_key='"+session_key+"'"
     print('checkLogin')
-    return True
+    db= WeUtil.getdb()
+    cur = db.cursor()
+    cur.execute(sql)
+    rs = cur.fetchall()
+    if(len(rs)>0):
+        return True
+    else:
+        return False
 
 def main_handler(event, context):
     global f
@@ -41,9 +51,20 @@ def main_handler(event, context):
             relative_file='/index.html'#/weserver 这种路径表示用户打开的是网站首页
     else:
         relative_file="/index.html"
+
+
     absolute_path=dir_path+static_root+relative_file
+    #判断登录进行拦截
+    if(type.find("html")>-1):
+        print('登录拦截')
+        if(checkLogin(WeUtil.getSession_Token(context)) or relative_file.find("syspage")>-1):
+            print('登录成功')
+        else:
+            print('跳转到登录页')
+            absolute_path=dir_path+'/public/syspage/login.html'
+
     if not os.path.exists(absolute_path):
-        absolute_path=dir_path+'/public/404.html'
+        absolute_path=dir_path+'/public/syspage/404.html?absolute_path='+absolute_path
     if(type!=None and type.find('image')>-1):
         with open(absolute_path, 'rb') as f:
             base64_data = base64.b64encode(f.read())
@@ -76,5 +97,5 @@ def main_handler(event, context):
         "isBase64Encoded": False,
         "statusCode": 200,
         "headers": {'Content-Type': type},
-        "body":html
+        "body":html+"<br>"+relative_path
     }#调试路径信息 "  relative_path"+relative_path+" dir_path="+dir_path+" absolute_pa"+absolute_path
