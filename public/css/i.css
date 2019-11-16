@@ -1,0 +1,48 @@
+#div_top{
+
+    background-color:white;
+    height: 110px;
+    width: 100%;
+
+}
+#div_logo{
+    width: 210px;
+    margin-left: 200px;
+    float:left;
+}
+#div_center{
+    height: 500px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#div_footer{
+     background-color:gray;
+    height: 50px;
+    width: 100%;
+}
+.logo{
+    height: 100px;
+    width:200px;
+}
+.logo_btn{
+    width: 100px;
+    height: 30px;
+    vertical-align: bottom;
+    background-color: green;
+    border-radius: 15px;
+    color: white;
+    margin-top: 50px;
+}
+.logo_div_btn{
+    vertical-align: bottom;
+    width: 105px;
+    height: 100px;
+    float:right;
+
+}
+#div_menu{
+    float:right;
+    width: 300px;
+    margin-right: 200px;
+}

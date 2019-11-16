@@ -1,0 +1,57 @@
+
+        .showtable .btn {
+            width: auto;
+            height: 30px;
+            background: white;
+            font-family: '宋体';
+            border-radius: 20px;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+            text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .showtable table {
+            width: 100%;
+        }
+
+        .showtable table, .showtable tr, .showtable td, .showtable th {
+            border-style: solid;
+            border-width: 2px;
+            border-color: darkgray;
+            border-collapse: collapse;
+        }
+
+        .showtable td {
+            border-width: 1px;
+            padding: 4px 4px 4px 4px;
+            font-size: 14px;
+            font-family: "宋体";
+        }
+
+        .showtable table {
+            min-height: 200px;
+        }
+
+        .showtable th {
+            height: 35px;
+        }
+
+        .showtable tr,.showtable th {
+            height: 25px;
+            border-width: 0px;
+        }
+
+        .showtable td a {
+            color: #66512c;
+        }
+
+        .showtable td a:hover {
+            color: #00a2d4;
+        }
+        .showtable td{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            word-break: keep-all;
+        }

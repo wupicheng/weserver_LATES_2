@@ -1,0 +1,26 @@
+Resources:
+  default:
+    Type: TencentCloud::Serverless::Namespace
+    weserver:
+      Properties:
+        CodeUri: .
+        Description: 本示例主要演示如何配置 API 网关触发器返回自定义的html页面
+        Environment:
+          Variables: {}
+        Events:
+          weserver_apigw:
+            Properties:
+              Enable: true
+              HttpMethod: ANY
+              IntegratedResponse: true
+              StageName: release
+              ServiceId: service-lur8mzgv
+            Type: APIGW
+        Handler: index.main_handler
+        MemorySize: 128
+        Runtime: Python3.6
+        Timeout: 3
+        VpcConfig:
+          SubnetId: ''
+          VpcId: ''
+      Type: TencentCloud::Serverless::Function

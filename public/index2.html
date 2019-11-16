@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>功能总览页</title>
+    <link rel="stylesheet" href="/css/index.css"></link>
+    <link rel="stylesheet" href="/css/menu.css"></link>
+    <link rel="stylesheet" href="/css/table1.css"></link>
+
+</head>
+<body>
+
+
+<div class="main_container">
+    <div id="index_top"  >
+        <style>
+            .toptitle{
+                width: 400px;
+                float:left;
+            }
+            .info{
+                position: absolute;
+                left: 45%;
+                top:80px;
+                padding: 10px 10px;
+                height: 25px;
+                display: none;
+                background-color: coral;
+                color:white;
+                font-size: 16px;
+                margin: auto auto;
+                z-index: 99;
+                border-radius: 20px;
+            }
+        </style>
+        <div class="top_title">
+             <div class="toptitle">微信小程序管理后台系统</div>
+            <div id="errorinfo" class="info" style=""> </div>
+        </div>
+    </div>
+    <div id="index_center">
+        <div id="index_left">
+            <div class="menutree" id="menutree1">
+
+            </div>
+        </div>
+
+        <div id="index_right">
+
+        </div>
+    </div>
+
+
+    </div>
+
+    <div id="index_footer">
+        <div >
+            2019-2020@CopyRight
+        </div>
+    </div>
+</div>
+<!--弹出窗口开始-->
+<style>
+    .jumpdiv{width: 450px;  height: auto;padding: 20px 20px 20px 20px; display:none;border-radius: 10px; border:1px solid gray;
+      position: absolute;top:100px;left:30%;background-color: aliceblue;}
+    .closediv{ text-align: right;float:right;width:100px; }
+    .control{width:400px;float:left;margin-top: 10px;}
+    .label{width:90px;height:25px;float:left;}
+    .input2{float:left;height:30px;}
+    .input2 input{ width: 300px;border-radius: 5px;height: 25px;}
+    .btn_info{ width: 100px;height: 30px; background-color: #00a2d4;border-radius: 5px;}
+    .formdiv{font-size: 14px;font-family: '新宋体'}
+</style>
+<div class="newdiv">
+    <div class="jumpdiv">
+        <div>
+             <div style="float:left;width: 100px;"><span>表单</span></div> <div class="closediv">关闭 X</div>
+        </div>
+        <div style="clear: both;margin-top: 5px;"><hr></div>
+
+        <div class="formdiv"></div>
+    </div>
+</div>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    
+    var db_url='https://service-1151luof-1251034513.ap-beijing.apigateway.myqcloud.com/release/db_common';
+    var page_param='';
+    var edit_type='';
+    $(function(){
+        initMenu();//初始化显示树形菜单
+        initClick();//给菜单添加点击方法
+        $('.closediv').on('click',function () {
+            $('.jumpdiv').fadeOut();
+        })
+    });
+    function initMenu(){
+
+           $.get(db_url,{"sql":"queryall_menus",
+                      "type":"query",
+                       "we_menu_id":"1",
+                       "we_menu_name":"aaa",
+                       "table_meta":"false","table_name":""},function(data){
+                console.log('云函数db_common返回值');
+                console.log(data);
+                 d=data.data;
+                    for(i=0;i<d.length;i++){
+                        menuitem='';
+                        if (d[i].we_menu_level=='1'){
+                             menuitem='<div class="menuitem level1" data-href=\''+d[i].we_menu_href+'\' id="'+d[i].we_menu_order+'"><a class="alink" href="javascript:void(0)"><img class="c_icon" src="https://weserver-1251034513.cos.ap-beijing.myqcloud.com/icon_file.png"><span>'+d[i].we_menu_name+'</span></a></div>'
+                        } else if(d[i].we_menu_level=='2'){
+                            menuitem='<div class="menuitem level2" data-href=\''+d[i].we_menu_href+'\'  id="'+d[i].we_menu_order+'"><a class="alink" href="javascript:void(0)"><img class="c_icon" src="https://weserver-1251034513.cos.ap-beijing.myqcloud.com/icon_file.png"><span>'+d[i].we_menu_name+'</span></a></div>'
+                        }else if(d[i].we_menu_level=='3'){
+                            menuitem='<div class="menuitem level3" data-href=\''+d[i].we_menu_href+'\'  id="'+d[i].we_menu_order+'"><a class="alink" href="javascript:void(0)"><img class="c_icon" src="https://weserver-1251034513.cos.ap-beijing.myqcloud.com/icon_file.png"><span>'+d[i].we_menu_name+'</span></a></div>'
+                        }
+
+                        $('.menutree').append(menuitem)
+                    }
+
+           },'json');
+
+    }
+    function  initClick() {
+        $('.menutree').on('click','.menuitem',null,function () {
+            var id= $(this).attr("id");
+            $(this).find("img").attr("src","https://weserver-1251034513.cos.ap-beijing.myqcloud.com/icon_file_open.png");
+            mhref= $(this).data('href')
+            if(mhref!=''){
+                //window.location.href=""+mhref;
+                 console.log(mhref);
+                 query(mhref)
+            }
+
+            $("[id^='"+id+"']").each(function (index,element) {
+                 var id2= $(element).attr("id");
+                 console.log(id);
+                 if(id.split('_').length+1==id2.split("_").length){
+                  $(element).show();
+                  console.log(id2);
+                  }else{
+
+                  }
+
+             })
+        });
+    }
+    function  query(param) {
+        page_param=param;
+       $.get(db_url,param,function (data) {
+           console.log(data);
+           d=data.data;
+           h=data.table_meta;
+           var max_len=100/(h.length);
+             var htmltxt="";
+                 htmltxt+="<div class='showtable'><table id='table1'  style='table-layout: fixed'>";
+                 htmltxt+="<thead>";
+                 htmltxt+="<tr><td colspan='"+(h.length)+"'><button onclick='newobj()'>新建</button></td><td style='width: 40px;border-left:0;border-right:0'></td><td style='width: 40px;border-left:0;border-right:0;'></td></tr>";
+                 htmltxt+="<tr>";
+             for(i=0;i<h.length;i++){
+                 htmltxt+="<th style='max-width: "+max_len+"%'>"+h[i].t_column_name_desc+"</th>"
+             }
+                htmltxt+="<th >编辑</th>"
+                htmltxt+="<th style='width: 40px'>删除</th>"
+                htmltxt+="</tr>";
+                htmltxt+="</thead>";
+             for(ii=0;ii<d.length;ii++){
+                htmltxt+="<tr id='"+d[ii].t_common_s_id+"'>";
+                for(jj=0;jj<h.length;jj++){
+                    c_name=h[jj].t_column_column_list;
+                    dd=d[ii];
+                    htmltxt+="<td title='"+dd[c_name]+"' style='max-width:"+max_len+"%'>"+dd[c_name]+"</td>";
+                }
+                //  dd=d[i];
+                //  for(var key in dd){
+                //     htmltxt+="<td>"+dd[key]+"</td>";
+                //  }
+                  htmltxt+="<td style=\"width: auto\"><a onclick=\"editbyid("+d[ii].t_common_s_id+",'"+h[0].t_tname+"')\"  href=\"javascript:void(0)\">编辑</a></td>";
+                  htmltxt+="<td style=\"width: auto\"><a onclick=\"deletebyid("+d[ii].t_common_s_id+",'"+h[0].t_tname+"')\"  href=\"javascript:void(0)\">删除</a></td>";
+                  // htmltxt+="<td style='width: auto'><a onclick='deletebyid("+d[ii].t_common_s_id+",'"+h[0].t_tname+"')' href='javascript:void(0)'>删除</a></td>";
+                htmltxt+="</tr>";
+             }
+                htmltxt+="</table></div>";
+           $('#index_right').empty();
+           $('#index_right').append(htmltxt);
+           initJumpwindow(data);
+       },'json');
+   }
+    function  editbyid(id,table_name) {
+            edit_type='update';
+            param={};
+            param['table_name']=table_name;
+            param['t_common_s_id']=id;
+            param['type']='querybyid';
+
+            $.get(db_url,param,function (data) {
+           console.log(data);
+           if(data.success=='true'){
+                   dd=data.data;
+                   d=dd[0];//取出第一行数据
+                   console.log('打开编辑框，填充第一行数据，打印如下：');
+                   console.log(d);
+                   try{
+                        for(var key in d){
+
+                        $x= $('.newinput[id='+key+']');
+                        $x.val(d[key]);
+                        //console.log($x);
+                        }
+                         $('.jumpdiv').fadeIn();//打开编辑窗口
+                   }catch (e) {
+                       console.log(e);
+                   }
+
+
+           }
+      },'json');
+   }
+    function deletebyid(id,table_name) {
+        if(window.confirm("确认删除数据吗？")){
+             param={"sql":"","type":"deletebyid", "table_meta":"false","table_name":table_name,"t_common_s_id":id}
+        $.get(db_url,param,function (data) {
+           console.log(data);
+           if(data.success=='true'){
+              showinfo("删除成功");
+              $("tr[id='"+data.t_common_s_id+"']").remove();
+           }
+      },'json');
+        }
+
+   }
+
+function showinfo(info) {
+    $('#errorinfo').html(info);
+    $('#errorinfo').fadeIn();
+    setTimeout(function () {
+        $('#errorinfo').fadeOut();
+    },5000);
+  }
+function initJumpwindow(data) {
+        d=data.data;
+        h=data.table_meta;
+        table_name='';
+        if(h.length>0){
+            table_name=h[0].t_tname;
+        }
+        console.log(h);
+        var str="";
+        for(var i=0;i<h.length; i++){
+            str+="<div class='control'><div class='label'>"+h[i].t_column_name_desc+"</div><div class='input2'><input class='newinput' type='text' id='"+h[i].t_column_column_list+"'></div></div>"
+        }
+        str+="<div class='control'><div class='label'></div><div class='input2' style='text-align: right;float:right;'><button class='btn_info' onclick='savedata(\""+table_name+"\");'>保存</button><button class='btn_info' onclick='docancel();'>取消</button><button style='display: none' onclick='test();'>测试</button></div></div>"
+      $('.newdiv .formdiv').empty();
+      $('.newdiv .formdiv').append(str);
+    }
+function newobj() {
+     $('.jumpdiv').fadeIn();
+     edit_type='insert';
+}
+function docancel() {
+     $('.jumpdiv').fadeOut();
+}
+function savedata(table_name) {//保存新建数据
+
+      newdata={}
+      $('.newinput').each(function (index,element) {
+
+         var id   =  element.id;
+         var value=  element.value;
+         //插入数据时
+         if(edit_type=='insert'&&id!='t_common_s_id'){
+             newdata[id]=value;
+         }
+         //编辑数据时
+         if(edit_type=='update'){
+             newdata[id]=value;
+         }
+
+      });
+      newdata2={};
+      newdata2['table_name']=table_name;
+      newdata2['type']=edit_type;
+      newdata2['param']=JSON.stringify(newdata);
+      console.log(newdata);
+
+
+      $.get(db_url,newdata2,function (data) {
+          if(data.success=='true'){
+               query(page_param);
+               console.log(data);
+               showinfo("数据操作成功");
+               $('.jumpdiv').fadeOut();//关闭对话框
+          }
+      },'json');
+}
+function test() {
+    j={"a1":"2","a2":{"a22":"222","a33":{"x":"b"}}}
+    jj= JSON.stringify(j);
+     $.get(db_url,{"type":"test","b":jj},function (data) {
+          if(data.success=='true'){
+
+          }
+      },'json');
+}
+</script>
+</body>
+
+</html>

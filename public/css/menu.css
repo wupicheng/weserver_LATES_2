@@ -1,0 +1,30 @@
+.menutree a{
+    text-decoration: none;
+    color: black;
+}
+.menutree .level1{
+    margin-left: 0px;
+
+}
+.menutree .level2{
+    margin-left: 20px;
+    display: none;
+    /*display: block;*/
+    /*visibility: collapse;*/
+
+}
+.menutree .level3{
+    margin-left: 50px;
+    display: none;
+    /*visibility: collapse;*/
+
+}
+.menutree .hi{
+    margin-left: -300px;
+    /*visibility: visible;*/
+    visibility: collapse;
+}
+.menutree .c_icon{
+    width: 20px;
+    height: 20px;
+}
