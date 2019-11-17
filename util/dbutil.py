@@ -7,7 +7,7 @@ import json
 
 class DBUtil:
     @staticmethod
-    def getdb(self):
+    def getdb():
         return  MySQLdb.connect(host='www.wupicheng.com', user='root', \
                                 passwd='824761abcD!', db='weserver2', use_unicode=1, \
                                 charset='utf8', cursorclass=MySQLdb.cursors.DictCursor)
@@ -26,3 +26,11 @@ class DBUtil:
         cur.close()
         db.close()
         return rs
+    def insertData(sql):
+        db = DBUtil.getdb()
+        cur = db.cursor()
+        cur.execute(sql)
+        cur.close()
+        db.commit()
+        db.close()
+        return True

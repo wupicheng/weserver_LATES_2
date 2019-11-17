@@ -1,0 +1,14 @@
+ .info{
+                position: absolute;
+                left: 45%;
+                top:80px;
+                padding: 10px 10px;
+                height: 25px;
+                display: none;
+                background-color: coral;
+                color:white;
+                font-size: 16px;
+                margin: auto auto;
+                z-index: 99;
+                border-radius: 20px;
+            }

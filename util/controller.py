@@ -15,7 +15,7 @@ class Controller:
         # model = __import__(temp)  # 导入模块
         model = importlib.import_module(temp)  # 导入模块
         function = getattr(model, func)  # 找到模块中的属性
-        function('helll')
+        return  function(event,context)
 
 
 # Controller.controllerHandler("/controller/aa/say",None,None)

@@ -30,7 +30,7 @@ def binaryReturn(absolute_path):
         "body": html
     }
 def checkLogin(session_key):
-    sql=" select * from we_session where we_session_key='"+session_key+"'"
+    sql=" select * from we_session where t_c_2='"+session_key+"'"
     print('checkLogin')
     db= WeUtil.getdb()
     cur = db.cursor()
@@ -45,8 +45,9 @@ def main_handler(event, context):
     global f
     relative_path=str(event["path"])#请求的路径/weserver/index.html
     relative_file=""
+    print(relative_path)
     type=mimetypes.guess_type(relative_path)[0]#根据路径的扩展名确定 content-type
-    if(relative_path.find("/controller")==1):
+    if(relative_path.find("/controller")==0):
         print('controller')
         return  Controller.controllerHandler(relative_path,event,context)
 
@@ -60,6 +61,8 @@ def main_handler(event, context):
 
     absolute_path=dir_path+static_root+relative_file
     #判断登录进行拦截
+    if(type==None):
+        type=''
     if(type.find("html")>-1):
         print('登录拦截')
         if(checkLogin(WeUtil.getSession_Token(context)) or relative_file.find("syspage")>-1):
@@ -69,7 +72,7 @@ def main_handler(event, context):
             absolute_path=dir_path+'/public/syspage/login.html'
 
     if not os.path.exists(absolute_path):
-        absolute_path=dir_path+'/public/syspage/404.html?absolute_path='+absolute_path
+        absolute_path=dir_path+'/public/syspage/404.html'
     if(type!=None and type.find('image')>-1):
         with open(absolute_path, 'rb') as f:
             base64_data = base64.b64encode(f.read())

@@ -6,6 +6,7 @@
     <title>注册页面</title>
 
      <link href="../css/formcontrol.css" rel="stylesheet">
+     <link href="../css/common.css" rel="stylesheet">
     <style>
         #login_div{
             margin-top: 60px;
@@ -13,17 +14,20 @@
     </style>
 </head>
 <body>
+<div>
+    <div id="errorinfo" class="info" style=""> </div>
+</div>
 <div id="login_div">
 
     <div class="title_div">用户注册
     <hr></div>
     <div class="control">
         <div class="label"><div class="label_text">电子邮件：</div></div>
-        <div class="input_div"><input type="text" id="user_account"></div>
+        <div class="input_div"><input type="text" id="email_address"></div>
     </div>
       <div class="control">
         <div class="label"><div class="label_text">验&nbsp;证&nbsp;码：</div></div>
-        <div class="input_div"><input type="text" id="check_code"><button class="check_btn" title="发送验证码到注册邮箱">发送验证码</button></div>
+        <div class="input_div"><input type="text" id="check_code"><button id="send_mail_btn" class="check_btn" onclick="sendmail();" title="发送验证码到注册邮箱">发送验证码</button></div>
     </div>
     <div class="control">
         <div class="label"><div class="label_text">用户密码：</div></div>
@@ -41,5 +45,43 @@
         </div>
     </div>
 </div>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    //发送验证码邮件
+    function sendmail() {
+      var email= $('#email_address').val();
+      if(email==''||email=='undefined'){
+          showinfo('电子邮箱账号不能为空！')
+          return false;
+      }
+      var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if(reg.test(email)){
+			//alert("邮箱格式正确");
+          url='http://we.wupicheng.com/controller/login/sendMail'
+          $.get(url,{"email_address":email},function (data) {
+              if(data.error_msg=='邮件发送成功'){
+                  showinfo("邮件发送成功，请登录电子邮箱获取验证码");
+                  $('#send_mail_btn').attr('disabled','true');
+                   setTimeout(function () {
+                        $('#send_mail_btn').removeAttr("disabled");
+                    },1000*60);
+              }
+          },'json');
+      }else{
+			showinfo("邮箱格式不正确");
+			return false;
+      }
+    }
+    function showinfo(info) {
+    $('#errorinfo').html(info);
+    $('#errorinfo').fadeIn();
+    setTimeout(function () {
+        $('#errorinfo').fadeOut();
+    },6000);
+  }
+</script>
 </body>
 </html>

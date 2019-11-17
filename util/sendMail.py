@@ -12,7 +12,7 @@ class SendMail:
 
     @staticmethod
     def  sendMail(to_addrs,checkcode):
-        print()
+        rs=''
         from_addr = 'wupicheng@qq.com'  # 邮件发送账号
         # to_addrs = 'accept@qq.com'  # 接收邮件账号
         qqCode = 'cqomtawwhwkvcaee'  # 授权码（这个要填自己获取到的）
@@ -34,7 +34,10 @@ class SendMail:
             stmp.sendmail(from_addr, to_addrs, message.as_string())
         except Exception as e:
             print('邮件发送失败--' + str(e))
+            rs='邮件发送失败'
         print('邮件发送成功')
+        rs='邮件发送成功'
+        return rs
 
 
 # SendMail.sendMail("tuobu_a@sohu.com","5678")
