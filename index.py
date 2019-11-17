@@ -5,6 +5,7 @@ import os
 import mimetypes
 import MySQLdb
 from util.util import WeUtil
+from util.controller import Controller
 
 # mimetypes=MimeTypes()
 
@@ -45,6 +46,10 @@ def main_handler(event, context):
     relative_path=str(event["path"])#请求的路径/weserver/index.html
     relative_file=""
     type=mimetypes.guess_type(relative_path)[0]#根据路径的扩展名确定 content-type
+    if(relative_path.find("/controller")==1):
+        print('controller')
+        return  Controller.controllerHandler(relative_path,event,context)
+
     if(relative_path.index("/",0)==0):
         relative_file=relative_path
         if(relative_file=='' or relative_file=='/'):

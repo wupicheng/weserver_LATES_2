@@ -35,9 +35,10 @@
             float: left;
         }
         .input_div input{
+            border:0px;
             width: 250px;
             height:30px;
-            border-radius: 10px;
+            border-radius: 6px;
 
         }
         .label_text{
@@ -59,4 +60,16 @@
         .control a:hover{
             color:#00a2d4;
             text-decoration: #00a2d4;
+        }
+        .check_btn{
+            margin-left: 5px;
+            height: 30px;
+            border-radius: 5px;
+            background-color: gray;
+            /*border:1px;*/
+        }
+        .common_btn{
+            width: 250px;
+            height:30px;
+            border-radius: 6px;
         }
